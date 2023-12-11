@@ -1,63 +1,56 @@
 #![allow(unreachable_code)]
 #[macro_use]
 extern crate rouille;
+extern crate serde;
+#[macro_use] extern crate serde_derive;
 use chrono::prelude::*;
+use chrono_tz::US::Pacific;
+use chrono_tz::Europe::Berlin;
+use chrono_tz::Asia::Tokyo;
 fn main() {
+    #[derive(Serialize)]
+    struct Health {
+        status: String,
+        message: String 
+    }
     println!("Now listening on localhost:8080");
-    let utc: DateTime<Utc> = Utc::now();
-    let local: DateTime<Local> = Local::now();
-    // The `start_server` starts listening forever on the given address.
+    let utc = Utc::now().naive_utc();
+    let ny = Pacific.from_utc_datetime(&utc);
+    let berlin = Berlin.from_utc_datetime(&utc);
+    let tokyo = Tokyo.from_utc_datetime(&utc);
     rouille::start_server("localhost:8080", move |request| {
         router!(request,
             (GET) (/) => {
-                // If the request's URL is `/`, we jump here.
-                // This block builds a `Response` object that redirects to the `/hello/world`.
-                rouille::Response::text(format!("UTC time is: {}", utc));
+                rouille::Response::html(format!("<!DOCTYPE html> \
+                    <html> \
+                    <body> \
+                    <h1>Time application</h1> \
+                    <table style='width:50%'> \
+                        <tr> \
+                            <th>Timezone</th> \
+                            <th>Time</th> \
+                        </tr> \
+                        <tr> \
+                            <td>NewYork</td> \
+                            <td>{}</td> \
+                        </tr> \
+                        <tr> \
+                            <td>Berlin</td> \
+                            <td>{}</td> \
+                        </tr> \
+                        <tr> \
+                            <td>Tokyo</td> \
+                            <td>{}</td> \
+                        </tr> \
+                    </table> \
+                    </body> \
+                    </html>", ny, berlin, tokyo))
             },
 
-            (GET) (/hello/world) => {
-                // If the request's URL is `/hello/world`, we jump here.
-                println!("hello world");
-
-                // Builds a `Response` object that contains the "hello world" text.
-                rouille::Response::text("hello world")
+            (GET) (/health) => {
+                rouille::Response::json(&Health { status: "success".to_owned(), message: "null".to_owned()})
             },
 
-            (GET) (/panic) => {
-                // If the request's URL is `/panic`, we jump here.
-                //
-                // This block panics. Fortunately rouille will automatically catch the panic and
-                // send back a 500 error message to the client. This prevents the server from
-                // closing unexpectedly.
-                panic!("Oops!")
-            },
-
-            (GET) (/{id: u32}) => {
-                // If the request's URL is for example `/5`, we jump here.
-                //
-                // The `router!` macro will attempt to parse the identifier (eg. `5`) as a `u32`. If
-                // the parsing fails (for example if the URL is `/hello`), then this block is not
-                // called and the `router!` macro continues looking for another block.
-                println!("u32 {:?}", id);
-
-                // For the same of the example we return an empty response with a 400 status code.
-                rouille::Response::empty_400()
-            },
-
-            (GET) (/{id: String}) => {
-                // If the request's URL is for example `/foo`, we jump here.
-                //
-                // This route is similar to the previous one, but this time we have a `String`.
-                // Parsing into a `String` never fails.
-                println!("String {:?}", id);
-
-                // Builds a `Response` object that contains "hello, " followed with the value
-                // of `id`.
-                rouille::Response::text(format!("hello, {}", id))
-            },
-
-            // The code block is called if none of the other blocks matches the request.
-            // We return an empty response with a 404 status code.
             _ => rouille::Response::empty_404()
         )
     });
