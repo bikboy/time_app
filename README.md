@@ -1,5 +1,6 @@
 # Simple time application
-
+## Build
+`cargo build --release`
 Application example of power and proficiency of RUST
 ## Routes:
 * root (/) returns local time in New-York, Berlin, Tokyo in HTML format
