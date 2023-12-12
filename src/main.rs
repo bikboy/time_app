@@ -18,7 +18,7 @@ fn main() {
     let ny = Pacific.from_utc_datetime(&utc);
     let berlin = Berlin.from_utc_datetime(&utc);
     let tokyo = Tokyo.from_utc_datetime(&utc);
-    rouille::start_server("localhost:8080", move |request| {
+    rouille::start_server("0.0.0.0:8080", move |request| {
         router!(request,
             (GET) (/) => {
                 rouille::Response::html(format!("<!DOCTYPE html> \
