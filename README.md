@@ -1,18 +1,20 @@
-Simple time application
-1) Create an application on Go/Python that serve HTTP requests at the next routes:
-- 8080:/
-- 8080:/health
-/ - returns local time in New-York, Berlin, Tokyo in HTML format
-/health - return status code 200, in JSON format
-2) Dockerize your app.
-3) Provision your infra using Terraform:
-- VPC
-- Subnets
-- SGs
-- Routing tables
-- EKS cluster
-- ECR
-4) Create and deploy Helm3 chart for your application.
-5) Ensure that you have an access to the application endpoint externally
-6) Provide an external http link
-7) Upload your code to the Github public repository and provide link to us (put your code to the app, terraform, helm folders accordingly)
+# Simple time application
+
+Application example of power and proficiency of RUST
+## Routes:
+* root (/) returns local time in New-York, Berlin, Tokyo in HTML format
+* healthcheck (/health) return status code 200, in JSON format
+## Dockerization
+Application dockerized with new docker option "docker init"(more info in README.Docker.md). Total image footprint = 5MB
+## Infrastructure
+Infrastructure provisioned with Terraform (folder infra/terraform) :
+* VPC
+* Subnets
+* SGs
+* Routing tables
+* EKS cluster
+* ECR
+## Deploymnet
+Appliction deployed to EKS with helm chart(infra/helm/timeapp)
+## Access
+currently application available with temporary link: http://a186f1bc91e3a4f238e9cb8d6683f320-165755754.us-east-1.elb.amazonaws.com:8080/
