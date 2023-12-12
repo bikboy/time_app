@@ -14,7 +14,7 @@ Infrastructure provisioned with Terraform (folder infra/terraform) :
 * Routing tables
 * EKS cluster
 * ECR
-## Deploymnet
+## Deployment
 Appliction deployed to EKS with helm chart(infra/helm/timeapp)
 ## Access
 currently application available with temporary link: http://a186f1bc91e3a4f238e9cb8d6683f320-165755754.us-east-1.elb.amazonaws.com:8080/
