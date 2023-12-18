@@ -19,4 +19,4 @@ Infrastructure provisioned with Terraform (folder infra/terraform) :
 Appliction deployed to EKS with helm chart(infra/helm/timeapp)
 `helm install timeapp infra/helm/timeapp -f infra/helm/timeapp/values.yaml`
 ## Access
-currently application available with temporary link: http://a186f1bc91e3a4f238e9cb8d6683f320-165755754.us-east-1.elb.amazonaws.com:8080/
+currently application not available (terraform destroy)
